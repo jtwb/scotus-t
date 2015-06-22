@@ -18,7 +18,10 @@ class OyezSpider(CrawlSpider):
     name = 'oyez'
     allowed_domains = ['oyez.org']
     start_urls = ['http://www.oyez.org/issues']
-    rules = [Rule(LinkExtractor(allow=['/cases/(\w|\d|[-/])+']), 'parse_case')]
+    rules = [
+        Rule(LinkExtractor(restrict_css="a[href^='/items'][title='Go to next page']"), follow=True),
+        Rule(LinkExtractor(allow=['/cases/(\w|\d|[-/])+']), 'parse_case'),
+    ]
 
     def parse_case(self, response):
         case = OralItem()
